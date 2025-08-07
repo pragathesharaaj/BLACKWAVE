@@ -1,0 +1,30 @@
+#include "WiFi.h"
+
+void setup() {
+  Serial.begin(115200);
+  WiFi.mode(WIFI_MODE_STA);
+  WiFi.disconnect();
+  delay(100);
+
+  Serial.println("Starting Wi-Fi scan...");
+}
+
+void loop() {
+  int networks = WiFi.scanNetworks();
+  Serial.println("Scan complete.");
+
+  if (networks == 0) {
+    Serial.println("No networks found.");
+  } else {
+    Serial.printf("%d networks found:\n", networks);
+    for (int i = 0; i < networks; i++) {
+      Serial.printf("%d: %s (RSSI: %d) Channel: %d MAC: %s\n", i + 1,
+        WiFi.SSID(i).c_str(),
+        WiFi.RSSI(i),
+        WiFi.channel(i),
+        WiFi.BSSIDstr(i).c_str());
+    }
+  }
+
+  delay(10000);  // Scan every 10 seconds
+}
